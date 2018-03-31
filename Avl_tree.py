@@ -9,29 +9,17 @@
 - Height = max(left_child.height(), right_child.height()) + 1
 """
 
+
 class Node(object):
-""" Node the smallest unit of the tree.
-	Holds the following information:
-	- Data (has influential magnitude).
-	- Height.
-	- leftChild pointer.
-	- rightChild pointer.
-	"""
 
 	def __init__(self, data):
 		self.data = data
 		self.height = 0;
-		self.left_child = Null
-		self.right_child = Null
+		self.left_child = None
+		self.right_child = None
 
 
 class AVL(object):
-""" An AVL tree has the following.
-	- Set the root of the AVL tree to None.
-	- Calculate height function.
-	- Calculate balance function.
-	- Rotate AVL tree function.
-	"""
 
 	def __init__(self):
 		self.root = None
@@ -70,27 +58,37 @@ class AVL(object):
 
 
 	def settle_violation(self, data, node):
-	""" Checks the tree for an property violations """
+		""" Checks the tree for an property violations """
 
 		# this returns an integer value
 		bal = self.calculate_balance(node)
 
-		# case 1 : left left heavy situation, if we know that the data is
-		# less than the node.leftChild.data we know it is a left heavy situation
+		# case 1 : left left heavy situation, if it is known that the data is
+		# less than the node.leftChild.data
 		if bal > 1 and data < node.leftChild.data:
 			print("this is a left left heavy situation")
 			return self.rotate_right(node)
 
-		# case 2 : right right heavy situation, if we know that the data is
-		# greater than the node.rightChild.data we know it is a right heavy situation
+		# case 2 : right right heavy situation, if it is known that the data is
+		# greater than the node.rightChild.data
 		if bal < -1 and data > node.rightChild.data:
 			print("this is a right right hevy situration")
 			return self.rotate_left(node)
 
+		# case3 : left right heavy situation
+		if bal > 0 and data > node.leftChild.data:
+			node.leftChild = self.rotate_left(node.leftChild)
+			return self.rotate_right(node)
+
+		# case4 : right left heavy situation
+		if bal < -1 and data < node.rightChild.data:
+			node.rightChild = self.rotate_right(node.rightChild)
+			return self.rotate_left(node)
+
 
 	def calc_height(self, node):
-	""" calculates the height of a given node.
-		This function is nessecary to make up for the value of None
+		""" calculates the height of a given node.
+			This function is nessecary to make up for the value of None
 		"""
 		# if null
 		if not node:
@@ -100,7 +98,7 @@ class AVL(object):
 
 
 	def calculate_balance(self, node):
-	""" Check if the tree is balanced
+		""" Check if the tree is balanced
 		- If the function returns a value > 1 :
 			then the tree is left heavy => do a right rotation
 		- If the function returns a value < 1 :
@@ -114,13 +112,13 @@ class AVL(object):
 
 
 	def rotate_right(self, node):
-	""" Rotates the tree to balance the tree.
+		""" Rotates the tree to balance the tree.
 		- The node is the head of the AVL tree.
 		- Initialize two variables
 		- Reassigning the variables
 		"""
 
-		print "rotating to the right " + node.data
+		print (node.data)
 
 		# Initialize a temporary leftChild to hold the curent node's lc
 		temp_lc = node.leftChild
@@ -143,7 +141,7 @@ class AVL(object):
 
 
 	def rotate_left(self, node):
-	""" Rotates the tree to balance the tree.
+		""" Rotates the tree to balance the tree.
 		- The node is the head of the AVL tree.
 		- Initialize two variables
 		- Reassigning the variables
@@ -153,8 +151,6 @@ class AVL(object):
 			- Because reassigning a reference variable is o(1)
 			- The height is also being thracked that is o(1)
 		"""
-
-		print "rotating to the left " + node.data
 
 		# Initialize a temporary rightChild to hold the curent node's rc
 		temp_rc = node.rightChild
